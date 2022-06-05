@@ -2,14 +2,7 @@ import SQS from 'aws-sdk/clients/sqs';
 import { Consumer } from 'sqs-consumer';
 import { ConsumerOptions } from 'sqs-consumer/dist/consumer';
 
-const sqs = new SQS({
-  region: process.env.AWS_SQS_REGION!,
-  maxRetries: 3,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  },
-});
+const sqs = new SQS();
 
 export const getApproxNumberOfMessages = async () => {
   const result = await sqs
