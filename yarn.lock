@@ -701,7 +701,7 @@ debug@^3.2.7:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
+debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -2584,6 +2584,13 @@ slice-ansi@^5.0.0:
   dependencies:
     ansi-styles "^6.0.0"
     is-fullwidth-code-point "^4.0.0"
+
+sqs-consumer@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/sqs-consumer/-/sqs-consumer-5.7.0.tgz#d7c83516e0258d261caae199889e094bda93ac05"
+  integrity sha512-CjPzGsmmsKb6L0ia1WjbxjojjIHjVZ1FDK8s1MhEnf1eS8lJjuC28QEmcBpryQgsyaIcg1SgTsuicoZe008oQg==
+  dependencies:
+    debug "^4.3.1"
 
 statuses@2.0.1:
   version "2.0.1"

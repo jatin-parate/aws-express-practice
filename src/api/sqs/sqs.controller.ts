@@ -1,5 +1,14 @@
 import type { RequestHandler } from 'express';
-import { deleteMessage, getMessage, sendMessage } from './sqs.service';
+import {
+  deleteMessage,
+  getMessage,
+  sendMessage,
+  startConsumer,
+} from './sqs.service';
+
+startConsumer(async (msg) => {
+  console.info('Message received', msg);
+});
 
 export const getMessageHandler: RequestHandler = async (req, res) => {
   const sqsResult = await getMessage();
