@@ -1,7 +1,6 @@
 import type { RequestHandler } from 'express';
 import {
-  deleteMessage,
-  getMessage,
+  getApproxNumberOfMessages,
   sendMessage,
   startConsumer,
 } from './sqs.service';
@@ -11,14 +10,7 @@ startConsumer(async (msg) => {
 });
 
 export const getMessageHandler: RequestHandler = async (req, res) => {
-  const sqsResult = await getMessage();
-  if (!sqsResult.Messages?.length) {
-    res.sendStatus(404);
-    return;
-  }
-  const [message] = sqsResult.Messages!;
-  res.json(sqsResult.Messages![0]);
-  await deleteMessage(message.ReceiptHandle!);
+  res.json({ total: parseInt(await getApproxNumberOfMessages(), 10) || 0 });
 };
 
 export const createMessageHandler: RequestHandler = async (req, res) => {

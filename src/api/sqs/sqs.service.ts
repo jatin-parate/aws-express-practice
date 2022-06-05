@@ -4,23 +4,26 @@ import { ConsumerOptions } from 'sqs-consumer/dist/consumer';
 
 const sqs = new SQS({
   region: process.env.AWS_SQS_REGION!,
+  maxRetries: 3,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
 
+export const getApproxNumberOfMessages = async () => {
+  const result = await sqs
+    .getQueueAttributes({
+      QueueUrl: process.env.AWS_SQS_URL!,
+      AttributeNames: ['ApproximateNumberOfMessages'],
+    })
+    .promise();
+
+  return result.Attributes!.ApproximateNumberOfMessages;
+};
 export const sendMessage = async (message: string) =>
   sqs
     .sendMessage({ QueueUrl: process.env.AWS_SQS_URL!, MessageBody: message })
-    .promise();
-
-export const deleteMessage = async (receiptHandle: string) =>
-  sqs
-    .deleteMessage({
-      QueueUrl: process.env.AWS_SQS_URL!,
-      ReceiptHandle: receiptHandle,
-    })
     .promise();
 
 export const getMessage = async () =>
