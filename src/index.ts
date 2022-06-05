@@ -1,9 +1,12 @@
 import dotEnv from 'dotenv';
-import app from './app';
+import { resolve } from 'node:path';
 
 dotEnv.config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: resolve(`.env.${process.env.NODE_ENV}`),
 });
+
+// eslint-disable-next-line import/first
+import app from './app';
 
 let port: number = parseInt(process.env.PORT as string, 10);
 
