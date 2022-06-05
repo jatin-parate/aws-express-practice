@@ -1,5 +1,5 @@
 {
     "src/**/*.ts": [
-        "eslint --fix --ignore-path .gitignore --write"
+        "eslint --fix --ignore-path .gitignore"
     ]
 }
