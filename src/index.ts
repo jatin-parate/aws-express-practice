@@ -1,4 +1,5 @@
 import dotEnv from 'dotenv';
+import { connect, disconnect } from 'mongoose';
 import http from 'node:http';
 import { resolve } from 'node:path';
 import AWS from 'aws-sdk';
@@ -25,27 +26,40 @@ if (!port || Number.isNaN(port)) {
 
 const server = http.createServer(app);
 
-const cleanUp = () => {
-  if (server.listening) {
-    server.close((err) => {
-      console.info('Server stopped listening');
+const cleanUp = async () => {
+  try {
+    await Promise.all([
+      disconnect(),
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      new Promise<void>((resolve, reject) => {
+        if (server.listening) {
+          server.close((err) => {
+            console.info('Server stopped listening');
 
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      } else {
-        process.exit(0);
-      }
-    });
-  } else {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        } else {
+          resolve();
+        }
+      }),
+    ]);
     process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(-1);
   }
 };
 
-server.listen(port, () => {
-  console.info(`Server is running on port ${port}`);
+connect(process.env.MONGO_DB_URL!).then(() => {
+  server.listen(port, () => {
+    console.info(`Server is running on port ${port}`);
 
-  process.on('SIGUSR2', cleanUp);
+    process.on('SIGUSR2', cleanUp);
 
-  process.on('SIGINT', cleanUp);
+    process.on('SIGINT', cleanUp);
+  });
 });
