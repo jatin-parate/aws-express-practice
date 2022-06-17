@@ -37,8 +37,8 @@ todosRouter.use(async (req, res, next) => {
 todosRouter.get('/', async (req, res) => {
   res.json(
     await Todo.find({
-      username: req.user.username,
-    }),
+      username: (req as any).user.username,
+    }).exec(),
   );
 });
 
@@ -46,14 +46,14 @@ todosRouter.post('/', async (req, res) => {
   res.status(201).json(
     await Todo.create({
       ...req.body,
-      username: req.user.username,
+      username: (req as any).user.username,
     }),
   );
 });
 
 todosRouter.delete('/:id', async (req, res) => {
   await Todo.deleteOne({ _id: req.params.id });
-  res.sendStatus(201);
+  res.sendStatus(200);
 });
 
 export default todosRouter;

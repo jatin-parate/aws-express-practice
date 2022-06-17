@@ -1,4 +1,5 @@
 import dotEnv from 'dotenv';
+import { connect } from 'mongoose';
 import http from 'node:http';
 import { resolve } from 'node:path';
 import AWS from 'aws-sdk';
@@ -42,10 +43,12 @@ const cleanUp = () => {
   }
 };
 
-server.listen(port, () => {
-  console.info(`Server is running on port ${port}`);
+connect(process.env.MONGO_DB_URL!).then(() => {
+  server.listen(port, () => {
+    console.info(`Server is running on port ${port}`);
 
-  process.on('SIGUSR2', cleanUp);
+    process.on('SIGUSR2', cleanUp);
 
-  process.on('SIGINT', cleanUp);
+    process.on('SIGINT', cleanUp);
+  });
 });
