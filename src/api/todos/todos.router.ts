@@ -8,7 +8,7 @@ const cognitoExpress = new CognitoExpress({
   region: process.env.AWS_REGION!,
   cognitoUserPoolId: process.env.AWS_COGNITO_POOL_ID!,
   tokenUse: 'access',
-  tokenExpiration: 3600000,
+  // tokenExpiration: 3600000,
 });
 
 const todosRouter = Router();
@@ -20,15 +20,15 @@ todosRouter.use(async (req, res, next) => {
     throw new Unauthorized();
   }
 
-  await new Promise<void>((resolve) => {
+  await new Promise<void>((resolve, reject) => {
     cognitoExpress.validate(authorization, (err: Error, result: never) => {
       if (err) {
-        throw new Unauthorized();
+        return reject(new Unauthorized());
       }
 
       // @ts-ignore
       req.user = result;
-      resolve();
+      return resolve();
     });
   });
   next();
@@ -53,7 +53,7 @@ todosRouter.post('/', async (req, res) => {
 
 todosRouter.delete('/:id', async (req, res) => {
   await Todo.deleteOne({ _id: req.params.id });
-  res.sendStatus(200);
+  res.status(200).json({});
 });
 
 export default todosRouter;
